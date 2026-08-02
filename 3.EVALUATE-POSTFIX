@@ -3,26 +3,8 @@
 #include <ctype.h>
 #include<math.h>
 
-char stack[100];
-int top = -1;
-
-void push(float x) {
-    top = top + 1;
-    stack[top] = x;
-}
-
-char pop() {
-    float item;
-    if (top == -1)
-    {
-        printf("Stack is already empty");
-    }
-    else{
-    item = stack[top];
-    top = top - 1;
-    }
-    return item;
-}
+float valStack[100];
+int valTop = -1;
 
 float precedence(char ch) {
     switch (ch) {
@@ -39,9 +21,6 @@ float precedence(char ch) {
             return 0;
     }
 }
-
-float valStack[100];
-int valTop = -1;
 
 void pushInt(float x) {
     valTop = valTop + 1;
@@ -119,26 +98,26 @@ int main() {
         }
  
         else if (ch == '(') {
-            push(ch);
+            pushInt(ch);
         }
         
         else if (ch == ')') {
-            while (stack[top] != '(') {
-                POSTFIX[j++] = pop();
+            while (valStack[valTop] != '(') {
+                POSTFIX[j++] = popInt();
             }
-            pop(); 
+            popInt(); 
         }
         else {
-            while (top!=-1 && precedence(stack[top]) >= precedence(ch)) {
-                POSTFIX[j++] = pop();
+            while (valTop!=-1 && precedence(valStack[valTop]) >= precedence(ch)) {
+                POSTFIX[j++] = popInt();
             }
-            push(ch);
+            pushInt(ch);
         }
         i++;
     }
 
-    while (top != -1) {
-        POSTFIX[j++] = pop();
+    while (valTop != -1) {
+        POSTFIX[j++] = popInt();
     }
 
     POSTFIX[j] = '\0';
