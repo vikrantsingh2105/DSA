@@ -1,0 +1,70 @@
+#include<stdio.h>
+
+#define SIZE 4
+void enqueue(int x);
+void dequeue();
+void display();
+int front= -1;
+int Rear= -1;
+int queue[SIZE];
+
+void enqueue(int x){
+    if (Rear== SIZE-1){
+        printf("Queue is full.");
+              return;
+        
+    }
+    else{
+        Rear=Rear+1;
+        queue[Rear]=x;
+        if(front== -1){
+             front =0;
+            
+        }
+    }
+}
+
+
+void dequeue(){
+    int num;
+    if(front==-1){
+        printf("Queue is empty.");
+        return;
+    }
+    else{
+        num=queue[front];
+        printf("Deleted element is:%d",num);
+        front=front+1;
+        printf("\n");
+    }
+    if(front>Rear){
+         front= -1;
+         Rear= -1;
+    }
+}
+
+void display(){
+    if(front== -1){
+        printf("Queue is empty.");
+        return;
+    }
+    else{
+        int i;
+        printf("Queue elements are:");
+        for(i=front;i<=Rear;i++){
+            printf("%d  ",queue[i]);
+        }
+        
+    }
+}
+int main(){
+    enqueue(7);
+    enqueue(9);
+    enqueue(5);
+    enqueue(4);
+    dequeue();
+    display();
+    
+    return 0;
+    
+}
