@@ -62,7 +62,8 @@ int Countnodes(struct node *root)
 {
     if(root==NULL)
         return 0;
-    return 1 + Countnodes(root->left) + Countnodes(root->right);
+    else
+        return 1 + Countnodes(root->left) + Countnodes(root->right);
 }
 
 void main(){
@@ -78,7 +79,6 @@ void main(){
     printf("postorder traversal of tree\t");
     postorder(root);
     printf("\n");
-    printf("Number of Nodes in tree \t");
-    Countnodes(root);
+    printf("Number of Nodes in tree %d",Countnodes(root));
     printf("\n");
 }
