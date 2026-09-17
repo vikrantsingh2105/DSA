@@ -1,0 +1,138 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node 
+{
+    int data;
+    struct node *left, *right;
+};
+
+struct node *create_node(int x)
+{
+    struct node *newnode = (struct node *)malloc(sizeof(struct node));
+    newnode->data = x;
+    newnode->left = NULL;
+    newnode->right = NULL;
+    return newnode;
+}
+
+struct node *insert(struct node *root, int value)
+{
+    if (root == NULL)
+        return create_node(value);
+
+    if (value < root->data)
+        root->left = insert(root->left, value);
+    else if (value > root->data)
+        root->right = insert(root->right, value);
+
+    return root;
+}
+
+struct node *search(struct node *root, int s_value)
+{
+    if (root == NULL || root->data == s_value)
+        return root;
+    else if (s_value < root->data)
+        return search(root->left, s_value);
+    else
+        return search(root->right, s_value);
+}
+
+// Finds the maximum value node in a subtree (in-order predecessor helper)
+struct node *findLargestNode(struct node *root)
+{
+    if (root == NULL || root->right == NULL)
+        return root;
+    return findLargestNode(root->right);
+}
+
+// Deletes a node matching val based on the provided algorithm
+struct node *delete_node(struct node *tree, int val)
+{
+    struct node *temp;
+
+    // Step 1: Element not present
+    if (tree == NULL)
+    {
+        printf("\nValue %d not found in the tree\n", val);
+        return NULL;
+    }
+
+    // Traverse left
+    if (val < tree->data)
+    {
+        tree->left = delete_node(tree->left, val);
+    }
+    // Traverse right
+    else if (val > tree->data)
+    {
+        tree->right = delete_node(tree->right, val);
+    }
+    // Node found: Case with two children
+    else if (tree->left != NULL && tree->right != NULL)
+    {
+        temp = findLargestNode(tree->left);
+        tree->data = temp->data;
+        tree->left = delete_node(tree->left, temp->data);
+    }
+    // Node found: Case with 0 or 1 child
+    else
+    {
+        temp = tree;
+        if (tree->left == NULL && tree->right == NULL)
+        {
+            tree = NULL;
+        }
+        else if (tree->left != NULL)
+        {
+            tree = tree->left;
+        }
+        else
+        {
+            tree = tree->right;
+        }
+        free(temp);
+    }
+
+    return tree;
+}
+
+void inorder(struct node *root)
+{
+    if (root != NULL)
+    {
+        inorder(root->left);
+        printf("%d\t", root->data);
+        inorder(root->right);
+    }
+}
+
+int main()
+{
+    struct node *root = NULL;
+
+    root = insert(root, 30);
+    root = insert(root, 40);
+    root = insert(root, 20);
+    root = insert(root, 50);
+    root = insert(root, 15);
+
+    printf("Inorder before deletion:\n");
+    inorder(root);
+    printf("\n");
+
+    // Deleting a leaf node (15)
+    root = delete_node(root, 15);
+    printf("After deleting 15:\n");
+    inorder(root);
+    printf("\n");
+
+    // Deleting a node with two children (30)
+    root = delete_node(root, 30);
+    printf("After deleting 30:\n");
+    inorder(root);
+    printf("\n");
+
+    return 0;
+}
